@@ -18,6 +18,8 @@ gem 'coffee-rails', '~> 4.2'
 
 gem 'slack-ruby-bot'
 gem 'slack-ruby-client'
+gem 'faye-websocket'
+
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

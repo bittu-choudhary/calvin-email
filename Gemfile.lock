@@ -51,11 +51,15 @@ GEM
     concurrent-ruby (1.0.2)
     debug_inspector (0.0.2)
     erubis (2.7.0)
+    eventmachine (1.2.1)
     execjs (2.7.0)
     faraday (0.10.0)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.10.1)
       faraday (>= 0.7.4, < 1.0)
+    faye-websocket (0.10.5)
+      eventmachine (>= 0.12.0)
+      websocket-driver (>= 0.5.1)
     ffi (1.9.14)
     gli (2.14.0)
     globalid (0.3.7)
@@ -175,6 +179,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   coffee-rails (~> 4.2)
+  faye-websocket
   jbuilder (~> 2.5)
   jquery-rails
   listen (~> 3.0.5)
