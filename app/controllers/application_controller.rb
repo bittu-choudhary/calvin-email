@@ -33,9 +33,10 @@ class ApplicationController < ActionController::Base
         end
       end
     else
-      get_message.on :message do |data|
-        get_message.message channel: data.user_id, text: "Wrong email format.(Follow /email <subject> /text <body>)"
-      end
+      client.chat_postMessage(channel: data.user_id, text: "Wrong email format.(Follow /email <subject> /text <body>)", as_user: true)
+      # get_message.on :message do |data|
+      #   get_message.message channel: data.user_id, text: "Wrong email format.(Follow /email <subject> /text <body>)"
+      # end
     end
   end
 end
