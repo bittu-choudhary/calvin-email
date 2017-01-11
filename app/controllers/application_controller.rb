@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
         end
       end
     else
-      get_message.message user: data.user_id, text: "Wrong email format.(Follow /email <subject> /text <body>)"
+      get_message.message channel: data.user_id, text: "Wrong email format.(Follow /email <subject> /text <body>)"
     end
   end
 end
