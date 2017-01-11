@@ -5,6 +5,22 @@ class ApplicationController < ActionController::Base
     config.token = ENV['calvin_token']
   end
 
+  # get_message = Slack::RealTime::Client.new
+  # get_message.on :message do |data|
+  #   # get_message.message user: data.user_id, text: "Do you want to send this email? subject -> #{content.first.strip}, body -> #{content.last.strip}. Type y/n" if state == 1
+  #   # state = 2
+  #   if (data.text == 'y' || data.text == 'Y')
+  #     # CalvinMailer.inform_channel(from_name, from_email, members_emails, content.first.strip, content.last.strip).deliver
+  #   elsif (data.text == 'n' || data.text == 'N')
+  #     get_message.message channel: data.channel, text: "Email not sent."
+  #   else
+  #     get_message.message channel: data.channel, text: "Enter correct value."
+  #   end
+  # end
+  # Thread.new do
+  #   get_message.start!
+  # end
+
   def create
     data  =OpenStruct.new params
     client = Slack::Web::Client.new
@@ -28,11 +44,16 @@ class ApplicationController < ActionController::Base
         if (data.text == 'y' || data.text == 'Y')
           CalvinMailer.inform_channel(from_name, from_email, members_emails, content.first.strip, content.last.strip).deliver
         elsif (data.text == 'n' || data.text == 'N')
-          get_message.message user: data.user_id, text: "Email not sent."
+          get_message.message channel: data.channel, text: "Email not sent."
         else
-          get_message.message user: data.user_id, text: "Enter correct value."
+          get_message.message channel: data.channel, text: "Enter correct value."
         end
       end
+
+      Thread.new do
+        get_message.start!
+      end
+
     else
       client.chat_postMessage(channel: data.user_id, text: "Wrong email format.(Follow /email <subject> /text <body>)", as_user: true)
     end
