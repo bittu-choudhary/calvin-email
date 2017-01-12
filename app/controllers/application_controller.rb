@@ -40,6 +40,7 @@ class ApplicationController < ActionController::Base
         client.chat_postMessage(channel: data.user_id, text: "Do you want to send this email? subject -> #{content.first.strip}, body -> #{content.last.strip}. Type shoot/nope", as_user: true)
         state = "email_prepared"
         get_message.on :message do |data|
+          p data
           if data.channel == "D3QFDUBV2"
             if (data.text.downcase == 'shoot') && (state == "email_prepared")
               CalvinMailer.inform_channel(from_name, from_email, members_emails, content.first.strip, content.last.strip).deliver
