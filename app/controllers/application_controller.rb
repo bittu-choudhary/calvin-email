@@ -38,14 +38,15 @@ class ApplicationController < ActionController::Base
       get_message = Slack::RealTime::Client.new
       if data.command == "/email" && (content.length == 2) && !content.first.blank? && !content.last.blank?
         client.chat_postMessage(channel: data.user_id, text: "Do you want to send this email? subject -> #{content.first.strip}, body -> #{content.last.strip}. Type shoot/nope", as_user: true)
-        state = 1
+        state = "email_prepared"
         get_message.on :message do |data|
-          if (data.text.downcase == 'shoot')
+          if (data.text.downcase == 'shoot') && (state == "email_prepared")
             CalvinMailer.inform_channel(from_name, from_email, members_emails, content.first.strip, content.last.strip).deliver
-          elsif (data.text.downcase == 'nope')
+          elsif (data.text.downcase == 'nope') && (state == "email_prepared")
             get_message.message channel: data.channel, text: "Email not sent."
+            state = nil
           else
-            get_message.message channel: data.channel, text: "Enter correct value."
+            get_message.message channel: data.channel, text: "Sorry, i didn't understand that"
           end
         end
 
