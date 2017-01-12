@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
         state = "email_prepared"
         get_message.on :message do |data|
           p data
-          if data.channel == "D3QFDUBV2"
+          if data.channel == "D3GPN9J4X"
             if (data.text.downcase == 'shoot') && (state == "email_prepared")
               CalvinMailer.inform_channel(from_name, from_email, members_emails, content.first.strip, content.last.strip).deliver
             elsif (data.text.downcase == 'nope') && (state == "email_prepared")
