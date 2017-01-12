@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
             get_message.message channel: data.channel, text: "Email not sent."
             state = nil
           else
-            get_message.message channel: data.channel, text: "Sorry, i didn't understand that"
+            get_message.message channel: data.channel, text: "Sorry, i didn't understand that" if data.channel == "U3FCSJZ6D"
           end
         end
 
