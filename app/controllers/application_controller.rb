@@ -43,9 +43,10 @@ class ApplicationController < ActionController::Base
           p data
           chat_channel = nil
           client.im_list.ims.each{|direct_channels| chat_channel = direct_channels.id if direct_channels.user == data.user}
-          if data.channel == chat_channel
+          if data.channel == chat_channel && (data.user != "U3FCSJZ6D") #calvin user id
             if (data.text.downcase == 'shoot') && (state == "email_prepared")
               CalvinMailer.inform_channel(from_name, from_email, members_emails, content.first.strip, content.last.strip).deliver
+              get_message.message channel: data.channel, text: "Done. Have a nice day."
               state = nil
             elsif (data.text.downcase == 'nope') && (state == "email_prepared")
               get_message.message channel: data.channel, text: "Email not sent."
