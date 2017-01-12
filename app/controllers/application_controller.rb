@@ -46,10 +46,11 @@ class ApplicationController < ActionController::Base
           if data.channel == chat_channel
             if (data.text.downcase == 'shoot') && (state == "email_prepared")
               CalvinMailer.inform_channel(from_name, from_email, members_emails, content.first.strip, content.last.strip).deliver
+              state = nil
             elsif (data.text.downcase == 'nope') && (state == "email_prepared")
               get_message.message channel: data.channel, text: "Email not sent."
               state = nil
-            elsif (data.text.downcase == 'shoot') && (state != "email_prepared")
+            elsif (data.text.downcase == 'shoot') && state.nil?
               get_message.message channel: data.channel, text: "Nothing to shoot. Queue a email first."
             else
               get_message.message channel: data.channel, text: "Sorry, i didn't understand that"
