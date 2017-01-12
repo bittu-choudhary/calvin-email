@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
 
   def create
     data  = OpenStruct.new params
-    if data.token != ENV['SLACK_EMAIL_BOT']
+    if data.token != ENV['SLACK_EMAIL_BOT'] && (data.channel_name != "directmessage")
       client = Slack::Web::Client.new
       from_name = client.users_info(user: data.user_id).user.profile.real_name if data.user_id
       from_email = client.users_info(user: data.user_id).user.profile.email if data.user_id
