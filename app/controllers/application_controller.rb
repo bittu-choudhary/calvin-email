@@ -40,13 +40,17 @@ class ApplicationController < ActionController::Base
         client.chat_postMessage(channel: data.user_id, text: "Do you want to send this email? subject -> #{content.first.strip}, body -> #{content.last.strip}. Type shoot/nope", as_user: true)
         state = "email_prepared"
         get_message.on :message do |data|
-          if (data.text.downcase == 'shoot') && (state == "email_prepared")
-            CalvinMailer.inform_channel(from_name, from_email, members_emails, content.first.strip, content.last.strip).deliver
-          elsif (data.text.downcase == 'nope') && (state == "email_prepared")
-            get_message.message channel: data.channel, text: "Email not sent."
-            state = nil
-          else
-            get_message.message channel: data.channel, text: "Sorry, i didn't understand that" if data.channel == "U3FCSJZ6D"
+          if data.channel == "D3QFDUBV2"
+            if (data.text.downcase == 'shoot') && (state == "email_prepared")
+              CalvinMailer.inform_channel(from_name, from_email, members_emails, content.first.strip, content.last.strip).deliver
+            elsif (data.text.downcase == 'nope') && (state == "email_prepared")
+              get_message.message channel: data.channel, text: "Email not sent."
+              state = nil
+            elsif (data.text.downcase == 'shoot') && (state != "email_prepared")
+              get_message.message channel: data.channel, text: "Nothing to shoot. Queue a email first."
+            else
+              get_message.message channel: data.channel, text: "Sorry, i didn't understand that"
+            end
           end
         end
 
