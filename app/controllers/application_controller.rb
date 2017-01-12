@@ -67,5 +67,6 @@ class ApplicationController < ActionController::Base
         client.chat_postMessage(channel: data.user_id, text: "Wrong email format.(Follow /email <subject> /text <body>)", as_user: true)
       end
     end
+    render :nothing => true, :status => 200, :content_type => 'text/html'
   end
 end
