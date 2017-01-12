@@ -28,6 +28,7 @@ class ApplicationController < ActionController::Base
       from_name = client.users_info(user: data.user_id).user.profile.real_name if data.user_id
       from_email = client.users_info(user: data.user_id).user.profile.email if data.user_id
       members = client.channels_info(channel: data.channel_id).channel.members.to_a - [data.user_id] if data.channel_id
+      sent_to = client.channels_info(channel: data.channel_id).channel.name
       members_emails = []
       if !members.blank?
         members.each do |member|
@@ -37,7 +38,7 @@ class ApplicationController < ActionController::Base
       content = data.text.split("/text") if data.text
       get_message = Slack::RealTime::Client.new
       if data.command == "/email" && (content.length == 2) && !content.first.blank? && !content.last.blank?
-        client.chat_postMessage(channel: data.user_id, text: "Do you want to send this email? subject -> #{content.first.strip}, body -> #{content.last.strip}. Type shoot/nope", as_user: true)
+        client.chat_postMessage(channel: data.user_id, text: "Do you want to send this email to #{sent_to} channel members? subject -> #{content.first.strip}, body -> #{content.last.strip}. Type shoot/nope", as_user: true)
         state = "email_prepared"
         get_message.on :message do |data|
           p data
